@@ -100,7 +100,7 @@ describe("The json-to-html-form module", function () {
                     });
                 });
                 describe("Value is a boolean", function () {
-                    it("should add an input[type='text'][value='null']", function () {
+                    it("should add an input[type='text'][value='true']", function () {
                         let testJson = {
                             "string1": true
                         };
