@@ -31,7 +31,6 @@ describe("The json-to-html-form module", function () {
         });
 
         describe("The HTML (return value)", function () {
-
             it("should contain an empty form (html string) if no argument(s) were supplied", function () {
                 let html = jthf.getForm();
 
@@ -44,30 +43,76 @@ describe("The json-to-html-form module", function () {
                 expect(html).to.equals("<form><fieldset><legend>Root</legend></fieldset></form>");
             });
 
-            it("should add a label with a span and an input[type='text'] to all key/value pairs (where the value is a string)", function () {
-                let testJson = {
-                    "string1": "one",
-                    "string2": "two"
-                };
-                let html = jthf.getForm(testJson);
+            describe("Simple key/values", function () {
+                describe("Value is a string", function () {
+                    it("should add a label with a span and an input[type='text'] to all key/value pairs", function () {
+                        let testJson = {
+                            "string1": "one",
+                            "string2": "two"
+                        };
+                        let html = jthf.getForm(testJson);
 
-                document.body.innerHTML = html;
+                        document.body.innerHTML = html;
 
-                let labels = $("fieldset label");
+                        let labels = $("fieldset label");
 
-                let label1 = labels.eq(0);
-                let span1 = label1.find("span");
-                let inp1 = label1.find("input[type='text']");
+                        let label1 = labels.eq(0);
+                        let span1 = label1.find("span");
+                        let inp1 = label1.find("input[type='text']");
 
-                expect(span1.text()).to.equals("string1");
-                expect(inp1.val()).to.equals("one");
+                        expect(span1.text()).to.equals("string1");
+                        expect(inp1.val()).to.equals("one");
 
-                let label2 = labels.eq(1);
-                let span2 = label2.find("span");
-                let inp2 = label2.find("input[type='text']");
+                        let label2 = labels.eq(1);
+                        let span2 = label2.find("span");
+                        let inp2 = label2.find("input[type='text']");
 
-                expect(span2.text()).to.equals("string2");
-                expect(inp2.val()).to.equals("two");
+                        expect(span2.text()).to.equals("string2");
+                        expect(inp2.val()).to.equals("two");
+                    });
+                });
+                describe("Value is a number", function () {
+                    it("should add an input[type='text'][value='1']", function () {
+                        let testJson = {
+                            "string1": 1
+                        };
+                        let html = jthf.getForm(testJson);
+
+                        document.body.innerHTML = html;
+
+                        let numberValInput = $("fieldset label input[type='text'][value='1']");
+
+                        expect(numberValInput.length > 0).to.equals(true);
+                    });
+                });
+                describe("Value is null", function () {
+                    it("should add an input[type='text'][value='null']", function () {
+                        let testJson = {
+                            "string1": null
+                        };
+                        let html = jthf.getForm(testJson);
+
+                        document.body.innerHTML = html;
+
+                        let nullValInput = $("fieldset label input[type='text'][value='null']");
+
+                        expect(nullValInput.length > 0).to.equals(true);
+                    });
+                });
+                describe("Value is a boolean", function () {
+                    it("should add an input[type='text'][value='null']", function () {
+                        let testJson = {
+                            "string1": true
+                        };
+                        let html = jthf.getForm(testJson);
+
+                        document.body.innerHTML = html;
+
+                        let boolValInput = $("fieldset label input[type='text'][value='true']");
+
+                        expect(boolValInput.length > 0).to.equals(true);
+                    });
+                });
             });
         });
     });
