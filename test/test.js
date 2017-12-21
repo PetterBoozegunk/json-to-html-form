@@ -155,6 +155,35 @@ describe("The json-to-html-form module", function () {
                     expect(arrObjectTest.find("input[type='text'][value='yay']").length).to.equals(1);
                 });
             });
+
+            describe("When the json object is nested", function () {
+                it("should also work...", function () {
+                    let testJson = {
+                        "str": "Marky",
+                        "array2": [{
+                            "name": "Joey"
+                        }, {
+                            "name": "Dee Dee"
+                        }],
+                        "obj": {
+                            "array3": [{
+                                "txt": "deeply nested"
+                            }]
+                        }
+                    };
+                    let html = jthf.getForm(testJson);
+
+                    document.body.innerHTML = html;
+
+                    let test1 = $("fieldset > label input[value='Marky']");
+                    let test2 = $("fieldset > .array > ul > li > label > input[value='Joey']");
+                    let test3 = $("fieldset > fieldset > .array > ul > li > label > input[value='deeply nested']");
+
+                    expect(test1.length).to.equals(1);
+                    expect(test2.length).to.equals(1);
+                    expect(test3.length).to.equals(1);
+                });
+            });
         });
     });
 });
