@@ -113,6 +113,19 @@ describe("The json-to-html-form module", function () {
                         expect(boolValInput.length > 0).to.equals(true);
                     });
                 });
+
+                it("should render a <textarea> if the value is 30 chars or more", function () {
+                    let testJson = {
+                        "longString": "This is a string that has more then 30 chars in it. You bet ya buddiy!!"
+                    };
+                    let html = jthf.getForm(testJson);
+
+                    document.body.innerHTML = html;
+
+                    let txtarea = $("fieldset textarea[name='longString']");
+
+                    expect(txtarea.length).to.equals(1);
+                });
             });
 
             describe("When the value (in key/value) is an object", function () {
