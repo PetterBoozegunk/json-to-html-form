@@ -1,6 +1,6 @@
 {
   "name": "json-to-html-form",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Get a html form from json",
   "main": "index.js",
   "repository": "https://github.com/PetterBoozegunk/json-to-html-form",
