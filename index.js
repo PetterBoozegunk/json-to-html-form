@@ -38,11 +38,12 @@ utils = {
 
         return html;
     },
-    addArrayUl: function (key, val) {
-        let html = "<div class='array'><h2>" + key + "</h2><ul>";
+    addArrayUl: function (key, val, options) {
+        let htmlBeforeArray = (options && options.htmlBeforeArray) ? options.htmlBeforeArray : "";
+        let html = "<div class='array'><h2>" + key + "</h2>" + htmlBeforeArray + "<ul>";
 
         val.forEach(function (item) {
-            html += "<li>" + utils.getHtml(item) + "</li>";
+            html += "<li>" + utils.getHtml(item, options) + "</li>";
         });
 
         html += "</ul></div>";
@@ -56,7 +57,7 @@ utils = {
             if (utils.isObject(obj[key])) {
                 html += utils.addObjectFieldset(key, obj[key], options);
             } else if (utils.isArray(obj[key])) {
-                html += utils.addArrayUl(key, obj[key]);
+                html += utils.addArrayUl(key, obj[key], options);
             } else {
                 html += utils.addSimpleKeyValue(key, obj[key]);
             }

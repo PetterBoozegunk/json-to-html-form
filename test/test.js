@@ -208,7 +208,7 @@ describe("The json-to-html-form module", function () {
             });
 
             describe("The htmlBeforeObject option", function () {
-                it("should be possible to add a html string efter each legend in a fieldset", function () {
+                it("should be possible to add a html string after each legend in a fieldset", function () {
                     let testJson = {
                         "options": "test",
                         "nestedTest": {
@@ -224,6 +224,31 @@ describe("The json-to-html-form module", function () {
 
                     let testP1 = $("form > fieldset > legend + .htmlBeforeObject");
                     let testP2 = $("form > fieldset > fieldset > legend + .htmlBeforeObject");
+
+                    expect(testP1.length).to.equals(1);
+                    expect(testP2.length).to.equals(1);
+                });
+            });
+
+            describe("The htmlBeforeArray option", function () {
+                it("should be possible to add a html string before an array <ul>", function () {
+                    let testJson = {
+                        "options": "test",
+                        "nestedTest": [{
+                            "deep": [{
+                                "deeper": "yay"
+                            }]
+                        }]
+                    };
+                    let options = {
+                        htmlBeforeArray: "<p class='htmlBeforeArray'>htmlBeforeArray</p>"
+                    };
+                    let html = jthf.getForm(testJson, options);
+
+                    document.body.innerHTML = html;
+
+                    let testP1 = $("fieldset > .array > h2 + .htmlBeforeArray + ul");
+                    let testP2 = $(".array .array > h2 + .htmlBeforeArray + ul");
 
                     expect(testP1.length).to.equals(1);
                     expect(testP2.length).to.equals(1);
