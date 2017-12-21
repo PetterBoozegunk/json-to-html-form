@@ -74,8 +74,8 @@ utils = {
 
         return html;
     },
-    getFormHtml: function (options, rootFs) {
-        return (options && options.noForm) ? rootFs : "<form>" + rootFs + "</form>";
+    getFormHtml: function (options, rootHtml) {
+        return (options && options.noForm) ? rootHtml : "<form>" + rootHtml + "</form>";
     }
 };
 
