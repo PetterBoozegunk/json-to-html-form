@@ -184,6 +184,57 @@ describe("The json-to-html-form module", function () {
                     expect(test3.length).to.equals(1);
                 });
             });
+
+            describe("form element name attribute", function () {
+                describe("A simple root property", function () {
+                    it("should get it's key (name) as the name attribute", function () {
+                        let testJson = {
+                            "level-1": "one"
+                        };
+                        let html = jthf.getForm(testJson);
+
+                        document.body.innerHTML = html;
+
+                        let textInput = $("form > fieldset > label > input[type='text'][value='one'][name='level-1']");
+
+                        expect(textInput.length).to.equals(1);
+                    });
+                });
+                describe("A nested property", function () {
+                    it("should get all it's parents key (names) as well as it's own key (name) as it's name attribute", function () {
+                        let testJson = {
+                            "level-1": {
+                                "level-2": "yay"
+                            }
+                        };
+                        let html = jthf.getForm(testJson);
+
+                        document.body.innerHTML = html;
+
+                        let textInput = $("input[type='text'][value='yay'][name='level-1.level-2']");
+
+                        expect(textInput.length).to.equals(1);
+                    });
+                });
+                describe("The name attribute in arrays", function () {
+                    it("should get the arrayName.index.propertyName as it's name attribute. ex: array1.0.name", function () {
+                        let testJson = {
+                            "level-1": {
+                                "level-2-array": [{
+                                    "name": "Glenn Danzig"
+                                }]
+                            }
+                        };
+                        let html = jthf.getForm(testJson);
+
+                        document.body.innerHTML = html;
+
+                        let textInput = $("input[type='text'][value='Glenn Danzig'][name='level-1.level-2-array.0.name']");
+
+                        expect(textInput.length).to.equals(1);
+                    });
+                });
+            });
         });
 
         describe("The options object", function () {
