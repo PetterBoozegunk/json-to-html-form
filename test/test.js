@@ -185,5 +185,50 @@ describe("The json-to-html-form module", function () {
                 });
             });
         });
+
+        describe("The options object", function () {
+            describe("The noForm option", function () {
+                it("shoulde be possible to set 'noForm' to false to skip the wrapping <form> tag", function () {
+                    let testJson = {
+                        "options": "test"
+                    };
+                    let options = {
+                        noForm: true
+                    };
+                    let html = jthf.getForm(testJson, options);
+
+                    document.body.innerHTML = html;
+
+                    let form = $("form");
+                    let fieldset = $("fieldset");
+
+                    expect(form.length).to.equals(0);
+                    expect(fieldset.length).to.equals(1);
+                });
+            });
+
+            describe("The htmlBeforeObject option", function () {
+                it("should be possible to add a html string efter each legend in a fieldset", function () {
+                    let testJson = {
+                        "options": "test",
+                        "nestedTest": {
+                            "name": "val"
+                        }
+                    };
+                    let options = {
+                        htmlBeforeObject: "<p class='htmlBeforeObject'>htmlBeforeObject</p>"
+                    };
+                    let html = jthf.getForm(testJson, options);
+
+                    document.body.innerHTML = html;
+
+                    let testP1 = $("form > fieldset > legend + .htmlBeforeObject");
+                    let testP2 = $("form > fieldset > fieldset > legend + .htmlBeforeObject");
+
+                    expect(testP1.length).to.equals(1);
+                    expect(testP2.length).to.equals(1);
+                });
+            });
+        });
     });
 });

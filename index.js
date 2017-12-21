@@ -21,10 +21,18 @@ utils = {
 
         return html;
     },
-    addObjectFieldset: function (key, val) {
+    addHtmlBeforeObject: function (options) {
+        if (options && options.htmlBeforeObject) {
+            return options.htmlBeforeObject;
+        }
+
+        return "";
+    },
+    addObjectFieldset: function (key, val, options) {
         let html = "<fieldset><legend>" + key + "</legend>";
 
-        html += utils.getHtml(val);
+        html += utils.addHtmlBeforeObject(options);
+        html += utils.getHtml(val, options);
 
         html += "</fieldset>";
 
@@ -41,12 +49,12 @@ utils = {
 
         return html;
     },
-    getHtml: function (obj) {
+    getHtml: function (obj, options) {
         let html = "";
 
         Object.keys(obj).forEach(function (key) {
             if (utils.isObject(obj[key])) {
-                html += utils.addObjectFieldset(key, obj[key]);
+                html += utils.addObjectFieldset(key, obj[key], options);
             } else if (utils.isArray(obj[key])) {
                 html += utils.addArrayUl(key, obj[key]);
             } else {
@@ -55,18 +63,20 @@ utils = {
         });
 
         return html;
+    },
+    getFormHtml: function (options, rootFs) {
+        return (options && options.noForm) ? rootFs : "<form>" + rootFs + "</form>";
     }
 };
 
 module.exports = {
-    getForm: function (json) {
+    getForm: function (json, options) {
         let addRoot = {
             "Root": json
         };
 
-        let rootFs = json ? utils.getHtml(addRoot) : "";
-        let formHtml = "<form>" + rootFs + "</form>";
+        let rootFs = json ? utils.getHtml(addRoot, options) : "";
 
-        return formHtml;
+        return utils.getFormHtml(options, rootFs);
     }
 };
