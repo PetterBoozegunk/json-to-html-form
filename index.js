@@ -29,7 +29,7 @@ utils = {
 
         html += "<label>";
         html += "<span>" + key + "</span>";
-        html += "<input type='text' value='" + val + "' data-key-id='" + keyId + "'>";
+        html += "<input type='text' value='" + val + "' name='" + keyId + "'>";
         html += "</label>";
 
         return html;
@@ -85,8 +85,8 @@ module.exports = {
             "Root": json
         };
 
-        let rootHtml = json ? utils.getHtml(addRoot, options, "") : "";
+        let html = json ? utils.getHtml(addRoot, options, "") : "";
 
-        return utils.getFormHtml(options, rootHtml);
+        return utils.getFormHtml(options, html);
     }
 };
