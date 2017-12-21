@@ -6,7 +6,7 @@
   "repository": "https://github.com/PetterBoozegunk/json-to-html-form",
   "author": "Petter Ahlberg <petter.ahlberg@gmail.com>",
   "license": "MIT",
-  "private": true,
+  "private": false,
   "scripts": {
     "test": "gulp complexity && mocha",
     "prepush": "yarn test"
