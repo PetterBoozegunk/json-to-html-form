@@ -23,13 +23,18 @@ utils = {
 
         return keyId.replace(/^root\./i, "");
     },
+    getTextValueElem: function (val, keyId) {
+        return (typeof val === "string" && val.length >= 30) ?
+            "<textarea name='" + keyId + "'>" + val + "</textarea>" :
+            "<input type='text' value='" + val + "' name='" + keyId + "'>";
+    },
     addSimpleKeyValue: function (key, val, parentKey) {
         let html = "";
         let keyId = utils.getKeyId(key, parentKey);
 
         html += "<label>";
         html += "<span>" + key + "</span>";
-        html += "<input type='text' value='" + val + "' name='" + keyId + "'>";
+        html += utils.getTextValueElem(val, keyId);
         html += "</label>";
 
         return html;
