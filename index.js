@@ -21,9 +21,9 @@ utils = {
 
         return html;
     },
-    addHtmlBeforeObject: function (options) {
-        if (options && options.htmlBeforeObject) {
-            return options.htmlBeforeObject;
+    addHtmlBefore: function (options, name) {
+        if (options && options[name]) {
+            return options[name];
         }
 
         return "";
@@ -31,7 +31,7 @@ utils = {
     addObjectFieldset: function (key, val, options) {
         let html = "<fieldset><legend>" + key + "</legend>";
 
-        html += utils.addHtmlBeforeObject(options);
+        html += utils.addHtmlBefore(options, "htmlBeforeObject");
         html += utils.getHtml(val, options);
 
         html += "</fieldset>";
@@ -39,7 +39,7 @@ utils = {
         return html;
     },
     addArrayUl: function (key, val, options) {
-        let htmlBeforeArray = (options && options.htmlBeforeArray) ? options.htmlBeforeArray : "";
+        let htmlBeforeArray = utils.addHtmlBefore(options, "htmlBeforeArray");
         let html = "<div class='array'><h2>" + key + "</h2>" + htmlBeforeArray + "<ul>";
 
         val.forEach(function (item) {
