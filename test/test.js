@@ -114,6 +114,47 @@ describe("The json-to-html-form module", function () {
                     });
                 });
             });
+
+            describe("When the value (in key/value) is an object", function () {
+                it("should add a fieldset and label/span/input for all simple key/values in that object", function () {
+                    let testJson = {
+                        "obj1": {
+                            "obj1Str": "yay",
+                            "obj1Bool": true
+                        }
+                    };
+                    let html = jthf.getForm(testJson);
+
+                    document.body.innerHTML = html;
+
+                    let fsObjectTest = $("fieldset > fieldset > label");
+
+                    expect(fsObjectTest.eq(0).find("span").text()).to.equals("obj1Str");
+                    expect(fsObjectTest.eq(0).find("input[type='text']").val()).to.equals("yay");
+
+                    expect(fsObjectTest.eq(1).find("input[type='text']").val()).to.equals("true");
+                });
+            });
+
+            describe("When the value (in key/value) is an array", function () {
+                it("should add a div.array and label/span/input for all object containing simple key/values in that array", function () {
+                    let testJson = {
+                        "array1": [{
+                            "name": "yo"
+                        }, {
+                            "name": "yay"
+                        }]
+                    };
+                    let html = jthf.getForm(testJson);
+
+                    document.body.innerHTML = html;
+
+                    let arrObjectTest = $("fieldset > .array > ul > li > label");
+
+                    expect(arrObjectTest.length).to.equals(2);
+                    expect(arrObjectTest.find("input[type='text'][value='yay']").length).to.equals(1);
+                });
+            });
         });
     });
 });
