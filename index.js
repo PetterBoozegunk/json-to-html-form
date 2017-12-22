@@ -12,19 +12,29 @@ utils = {
         return Array.isArray(val);
     },
     removeRootFromKey: function (key) {
-        return (key || "").replace(/^root(\.)?/i, "");
+        let keyStr = key || "";
+
+        return keyStr.replace(/^root(\.)?/i, "");
     },
     getKeyId: function (key, parentKey) {
         let keyId = parentKey ? parentKey + "." + key : key;
 
         return utils.removeRootFromKey(keyId);
     },
+    getBeforeHtmlFromFunction: function (options, name, key, parentKey) {
+        let keyId = utils.removeRootFromKey(parentKey);
+        let noRootKey = utils.removeRootFromKey(key);
+
+        return options[name](noRootKey, keyId);
+    },
+    getHtmlBefore: function (options, name, key, parentKey) {
+        return (typeof options[name] === "function") ?
+            utils.getBeforeHtmlFromFunction(options, name, key, parentKey) :
+            options[name];
+    },
     addHtmlBefore: function (options, name, key, parentKey) {
         if (options && options[name]) {
-            let keyId = utils.removeRootFromKey(parentKey);
-            let noRootKey = utils.removeRootFromKey(key);
-
-            return (typeof options[name] === "function") ? options[name](noRootKey, keyId) : options[name];
+            return utils.getHtmlBefore(options, name, key, parentKey);
         }
 
         return "";
