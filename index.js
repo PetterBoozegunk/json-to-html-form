@@ -25,8 +25,8 @@ utils = {
     },
     getTextValueElem: function (val, keyId) {
         return (typeof val === "string" && val.length >= 30) ?
-            "<textarea name='" + keyId + "'>" + val + "</textarea>" :
-            "<input type='text' value='" + val + "' name='" + keyId + "'>";
+            "<textarea name=\"" + keyId + "\">" + val + "</textarea>" :
+            "<input type=\"text\" value=\"" + val + "\" name=\"" + keyId + "\">";
     },
     addSimpleKeyValue: function (key, val, parentKey) {
         let html = "";
@@ -40,7 +40,7 @@ utils = {
         return html;
     },
     addObjectFieldset: function (key, val, options, parentKey) {
-        let html = "<fieldset><legend>" + key + "</legend>";
+        let html = "<fieldset class=\"object\"><legend>" + key + "</legend>";
         let keyId = utils.getKeyId(key, parentKey);
 
         html += utils.addHtmlBefore(options, "htmlBeforeObject");
@@ -52,7 +52,7 @@ utils = {
     },
     addArrayUl: function (key, val, options, parentKey) {
         let htmlBeforeArray = utils.addHtmlBefore(options, "htmlBeforeArray");
-        let html = "<div class='array'><h2>" + key + "</h2>" + htmlBeforeArray + "<ul>";
+        let html = "<fieldset class=\"array\"><legend>" + key + "</legend>" + htmlBeforeArray + "<ul>";
         let keyId = utils.getKeyId(key, parentKey);
 
         val.forEach(function (item, index) {
@@ -60,7 +60,7 @@ utils = {
             html += "<li>" + utils.getHtml(item, options, itemKeyId) + "</li>";
         });
 
-        html += "</ul></div>";
+        html += "</ul></fieldset>";
 
         return html;
     },
@@ -87,7 +87,7 @@ utils = {
 module.exports = {
     getForm: function (json, options) {
         let addRoot = {
-            "Root": json
+            "root": json
         };
 
         let html = json ? utils.getHtml(addRoot, options, "") : "";
