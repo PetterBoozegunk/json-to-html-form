@@ -162,10 +162,82 @@ describe("The json-to-html-form module", function () {
 
                     document.body.innerHTML = html;
 
-                    let arrObjectTest = $("fieldset.object > fieldset.array > legend + ul > li > label");
+                    let arrObjectTest = $("fieldset.object > fieldset.array > legend + ol > li > label");
 
                     expect(arrObjectTest.length).to.equals(2);
                     expect(arrObjectTest.find("input[type='text'][value='yay']").length).to.equals(1);
+                });
+
+                describe("When the values in an array is NOT an object", function () {
+                    describe("But a(n) ...", function () {
+                        describe("... string", function () {
+                            it("should be represented by a input[type='text']/textarea", function () {
+                                let testJson = {
+                                    "array1": ["Ramones", "Rocket from the tombs feat. The Dead Boys"]
+                                };
+                                let html = jthf.getForm(testJson);
+
+                                document.body.innerHTML = html;
+
+                                let stringLi = $("fieldset.array > ol > li > input[type='text']");
+                                let stringTxtarea = $("fieldset.array > ol > li > textarea");
+
+                                expect(stringLi.val()).to.equals("Ramones");
+                                expect(stringTxtarea.val()).to.equals("Rocket from the tombs feat. The Dead Boys");
+                            });
+                        });
+
+                        describe("... array", function () {
+                            it("should be represented by an array fieldset", function () {
+                                let testJson = {
+                                    "array1": [["nested", "array"]]
+                                };
+                                let html = jthf.getForm(testJson);
+
+                                document.body.innerHTML = html;
+
+                                let arrayFieldset = $("fieldset.array > ol > li > fieldset.array");
+                                let legend = arrayFieldset.find("> legend");
+                                let nestedArrayLis = arrayFieldset.find("> ol > li > input[type='text']");
+
+                                expect(legend.text()).to.equals("array1.0");
+
+                                expect(nestedArrayLis.get(0).value).to.equals("nested");
+                                expect(nestedArrayLis.get(1).value).to.equals("array");
+
+                                expect(nestedArrayLis.get(1).name).to.equals("array1.0.1");
+                            });
+
+                            it("should be able to handle deepley nested arrays (part 1)", function () {
+                                let testJson = {
+                                    "array1": [["nested", ["array"]]]
+                                };
+                                let html = jthf.getForm(testJson);
+
+                                document.body.innerHTML = html;
+
+                                let arrayFieldset = $("fieldset.array > ol > li > fieldset.array");
+                                let nestedArrayLis = arrayFieldset.find("input[type='text']");
+
+                                expect(nestedArrayLis.get(1).name).to.equals("array1.0.1.0");
+                            });
+
+                            it("should be able to handle deepley nested arrays (part 2)", function () {
+                                let testJson = {
+                                    "array1": [["nested", ["array", {
+                                        guitar: "Doyle"
+                                    }]]]
+                                };
+                                let html = jthf.getForm(testJson);
+
+                                document.body.innerHTML = html;
+
+                                let inputTxt = $("fieldset.array input[type='text'][name='array1.0.1.1.guitar']");
+
+                                expect(inputTxt.get(0).value).to.equals("Doyle");
+                            });
+                        });
+                    });
                 });
             });
 
@@ -189,8 +261,8 @@ describe("The json-to-html-form module", function () {
                     document.body.innerHTML = html;
 
                     let test1 = $("fieldset.object > label input[value='Marky']");
-                    let test2 = $("fieldset.object > fieldset.array > ul > li > label > input[value='Joey']");
-                    let test3 = $("fieldset.object > fieldset.object > .array > ul > li > label > input[value='deeply nested']");
+                    let test2 = $("fieldset.object > fieldset.array > ol > li > label > input[value='Joey']");
+                    let test3 = $("fieldset.object > fieldset.object > .array > ol > li > label > input[value='deeply nested']");
 
                     expect(test1.length).to.equals(1);
                     expect(test2.length).to.equals(1);
@@ -347,8 +419,8 @@ describe("The json-to-html-form module", function () {
 
                     document.body.innerHTML = html;
 
-                    let testP1 = $("fieldset.object > fieldset.array > legend + .htmlBeforeArray + ul");
-                    let testP2 = $("fieldset.array fieldset.array > legend + .htmlBeforeArray + ul");
+                    let testP1 = $("fieldset.object > fieldset.array > legend + .htmlBeforeArray + ol");
+                    let testP2 = $("fieldset.array fieldset.array > legend + .htmlBeforeArray + ol");
 
                     expect(testP1.length).to.equals(1);
                     expect(testP2.length).to.equals(1);

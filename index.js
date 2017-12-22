@@ -67,17 +67,49 @@ utils = {
 
         return html;
     },
+    arrayLiItemMethods: {
+        object: function (item, ignore, itemKeyId, options) {
+            return utils.getHtml(item, options, itemKeyId);
+        },
+        array: function (item, key, itemKeyId, options) {
+            if (itemKeyId === key) {
+                itemKeyId = "";
+            }
+
+            return utils.addArrayFieldset(key, item, options, itemKeyId);
+        },
+        defaultMethod: function (item, ignore, itemKeyId) {
+            return utils.getTextValueElem(item, itemKeyId);
+        }
+    },
+    getItemType: function (item) {
+        let type = "defaultType";
+
+        if (utils.isObject(item)) {
+            type = "object";
+        } else if (utils.isArray(item)) {
+            type = "array";
+        }
+
+        return type;
+    },
+    addItemToArrayLi: function (item, key, itemKeyId, options) {
+        let itemType = utils.getItemType(item);
+        let addItemMethod = utils.arrayLiItemMethods[itemType] || utils.arrayLiItemMethods.defaultMethod;
+
+        return addItemMethod(item, key, itemKeyId, options);
+    },
     addArrayFieldset: function (key, val, options, parentKey) {
         let htmlBeforeArray = utils.addHtmlBefore(options, "htmlBeforeArray", key, parentKey);
-        let html = "<fieldset class=\"array\"><legend>" + key + "</legend>" + htmlBeforeArray + "<ul>";
+        let html = "<fieldset class=\"array\"><legend>" + key + "</legend>" + htmlBeforeArray + "<ol>";
         let keyId = utils.getKeyId(key, parentKey);
 
         val.forEach(function (item, index) {
             let itemKeyId = keyId + "." + index;
-            html += "<li>" + utils.getHtml(item, options, itemKeyId) + "</li>";
+            html += "<li>" + utils.addItemToArrayLi(item, key + "." + index, itemKeyId, options) + "</li>";
         });
 
-        html += "</ul></fieldset>";
+        html += "</ol></fieldset>";
 
         return html;
     },
