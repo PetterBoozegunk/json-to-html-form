@@ -44,11 +44,12 @@ utils = {
             "<textarea name=\"" + keyId + "\">" + val + "</textarea>" :
             "<input type=\"text\" value=\"" + val + "\" name=\"" + keyId + "\">";
     },
-    addSimpleKeyValue: function (key, val, parentKey) {
+    addSimpleKeyValue: function (key, val, options, parentKey) {
         let html = "";
         let keyId = utils.getKeyId(key, parentKey);
 
         html += "<label>";
+        html += utils.addHtmlBefore(options, "htmlBeforeLabel", key, parentKey);
         html += "<span>" + key + "</span>";
         html += utils.getTextValueElem(val, keyId);
         html += "</label>";
@@ -89,7 +90,7 @@ utils = {
             } else if (utils.isArray(obj[key])) {
                 html += utils.addArrayFieldset(key, obj[key], options, parentKey);
             } else {
-                html += utils.addSimpleKeyValue(key, obj[key], parentKey);
+                html += utils.addSimpleKeyValue(key, obj[key], options, parentKey);
             }
         });
 
