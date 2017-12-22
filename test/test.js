@@ -318,6 +318,14 @@ describe("The json-to-html-form module", function () {
                     expect(testP2.length).to.equals(1);
                 });
             });
+
+            /* TODO:
+                The 'htmlBefore' options:
+                It should be possible to supply them as a function that is run every 'before' and that function should get a 'parentkey' and 'key' argument
+
+                Add a 'htmlBeforeLabel' option:
+                It should have the same features as the other 'htmlBefore' methods
+            */
         });
     });
 });
