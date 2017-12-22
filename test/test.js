@@ -319,7 +319,7 @@ describe("The json-to-html-form module", function () {
                 });
             });
 
-            /* TODO:
+            /*
                 The 'htmlBefore' options:
                 It should be possible to supply them as a function that is run every 'before' and that function should get a 'parentkey' and 'key' argument
 
