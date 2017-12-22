@@ -19,29 +19,29 @@ Get a html form from json
 *(but without indentation and new lines...)*
 
     <form>
-        <fieldset>
+        <fieldset class="object">
             <legend>Root</legend>
             <label>
                 <span>foo</span>
-                <input type='text' value='bar' name='foo'>
+                <input type="text" value="bar" name="foo">
             </label>
-            <fieldset>
+            <fieldset class="object">
                 <legend>foo1</legend>
                 <label>
                     <span>foo2</span>
-                    <input type='text' value='bar1' name='foo1.foo2'>
+                    <input type="text" value="bar1" name="foo1.foo2">
                 </label>
-                <div class='array'>
-                    <h2>array1</h2>
+                <fieldset class="array">
+                    <legend>array1</legend>
                     <ul>
                         <li>
                             <label>
                                 <span>arrayItem</span>
-                                <input type='text' value='item' name='foo1.array1.0.arrayItem'>
+                                <input type="text" value="item" name="foo1.array1.0.arrayItem">
                             </label>
                         </li>
                     </ul>
-                </div>
+                </fieldset>
             </fieldset>
         </fieldset>
     </form>

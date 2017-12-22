@@ -40,7 +40,7 @@ describe("The json-to-html-form module", function () {
             it("should contain a <form> contaning and a 'root' fieldset if the (json, object) argument is '{}' (an object)", function () {
                 let html = jthf.getForm({});
 
-                expect(html).to.equals("<form><fieldset><legend>Root</legend></fieldset></form>");
+                expect(html).to.equals("<form><fieldset class=\"object\"><legend>root</legend></fieldset></form>");
             });
 
             describe("Simple key/values", function () {
@@ -129,7 +129,7 @@ describe("The json-to-html-form module", function () {
             });
 
             describe("When the value (in key/value) is an object", function () {
-                it("should add a fieldset and label/span/input for all simple key/values in that object", function () {
+                it("should add a fieldset.object and label/span/input for all simple key/values in that object", function () {
                     let testJson = {
                         "obj1": {
                             "obj1Str": "yay",
@@ -140,7 +140,7 @@ describe("The json-to-html-form module", function () {
 
                     document.body.innerHTML = html;
 
-                    let fsObjectTest = $("fieldset > fieldset > label");
+                    let fsObjectTest = $("fieldset.object > fieldset.object > label");
 
                     expect(fsObjectTest.eq(0).find("span").text()).to.equals("obj1Str");
                     expect(fsObjectTest.eq(0).find("input[type='text']").val()).to.equals("yay");
@@ -150,7 +150,7 @@ describe("The json-to-html-form module", function () {
             });
 
             describe("When the value (in key/value) is an array", function () {
-                it("should add a div.array and label/span/input for all object containing simple key/values in that array", function () {
+                it("should add a fieldset.array and label/span/input for all object containing simple key/values in that array", function () {
                     let testJson = {
                         "array1": [{
                             "name": "yo"
@@ -162,7 +162,7 @@ describe("The json-to-html-form module", function () {
 
                     document.body.innerHTML = html;
 
-                    let arrObjectTest = $("fieldset > .array > ul > li > label");
+                    let arrObjectTest = $("fieldset.object > fieldset.array > legend + ul > li > label");
 
                     expect(arrObjectTest.length).to.equals(2);
                     expect(arrObjectTest.find("input[type='text'][value='yay']").length).to.equals(1);
@@ -188,9 +188,9 @@ describe("The json-to-html-form module", function () {
 
                     document.body.innerHTML = html;
 
-                    let test1 = $("fieldset > label input[value='Marky']");
-                    let test2 = $("fieldset > .array > ul > li > label > input[value='Joey']");
-                    let test3 = $("fieldset > fieldset > .array > ul > li > label > input[value='deeply nested']");
+                    let test1 = $("fieldset.object > label input[value='Marky']");
+                    let test2 = $("fieldset.object > fieldset.array > ul > li > label > input[value='Joey']");
+                    let test3 = $("fieldset.object > fieldset.object > .array > ul > li > label > input[value='deeply nested']");
 
                     expect(test1.length).to.equals(1);
                     expect(test2.length).to.equals(1);
@@ -286,8 +286,8 @@ describe("The json-to-html-form module", function () {
 
                     document.body.innerHTML = html;
 
-                    let testP1 = $("form > fieldset > legend + .htmlBeforeObject");
-                    let testP2 = $("form > fieldset > fieldset > legend + .htmlBeforeObject");
+                    let testP1 = $("form > fieldset.object > legend + .htmlBeforeObject");
+                    let testP2 = $("form > fieldset.object > fieldset.object > legend + .htmlBeforeObject");
 
                     expect(testP1.length).to.equals(1);
                     expect(testP2.length).to.equals(1);
@@ -311,8 +311,8 @@ describe("The json-to-html-form module", function () {
 
                     document.body.innerHTML = html;
 
-                    let testP1 = $("fieldset > .array > h2 + .htmlBeforeArray + ul");
-                    let testP2 = $(".array .array > h2 + .htmlBeforeArray + ul");
+                    let testP1 = $("fieldset.object > fieldset.array > legend + .htmlBeforeArray + ul");
+                    let testP2 = $("fieldset.array fieldset.array > legend + .htmlBeforeArray + ul");
 
                     expect(testP1.length).to.equals(1);
                     expect(testP2.length).to.equals(1);
