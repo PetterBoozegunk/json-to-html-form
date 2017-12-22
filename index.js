@@ -11,28 +11,45 @@ utils = {
     isArray: function (val) {
         return Array.isArray(val);
     },
-    addHtmlBefore: function (options, name) {
-        if (options && options[name]) {
-            return options[name];
-        }
+    removeRootFromKey: function (key) {
+        let keyStr = key || "";
 
-        return "";
+        return keyStr.replace(/^root(\.)?/i, "");
     },
     getKeyId: function (key, parentKey) {
         let keyId = parentKey ? parentKey + "." + key : key;
 
-        return keyId.replace(/^root\./i, "");
+        return utils.removeRootFromKey(keyId);
+    },
+    getBeforeHtmlFromFunction: function (options, name, key, parentKey) {
+        let keyId = utils.removeRootFromKey(parentKey);
+        let noRootKey = utils.removeRootFromKey(key);
+
+        return options[name](noRootKey, keyId);
+    },
+    getHtmlBefore: function (options, name, key, parentKey) {
+        return (typeof options[name] === "function") ?
+            utils.getBeforeHtmlFromFunction(options, name, key, parentKey) :
+            options[name];
+    },
+    addHtmlBefore: function (options, name, key, parentKey) {
+        if (options && options[name]) {
+            return utils.getHtmlBefore(options, name, key, parentKey);
+        }
+
+        return "";
     },
     getTextValueElem: function (val, keyId) {
         return (typeof val === "string" && val.length >= 30) ?
             "<textarea name=\"" + keyId + "\">" + val + "</textarea>" :
             "<input type=\"text\" value=\"" + val + "\" name=\"" + keyId + "\">";
     },
-    addSimpleKeyValue: function (key, val, parentKey) {
+    addSimpleKeyValue: function (key, val, options, parentKey) {
         let html = "";
         let keyId = utils.getKeyId(key, parentKey);
 
         html += "<label>";
+        html += utils.addHtmlBefore(options, "htmlBeforeLabel", key, parentKey);
         html += "<span>" + key + "</span>";
         html += utils.getTextValueElem(val, keyId);
         html += "</label>";
@@ -43,15 +60,15 @@ utils = {
         let html = "<fieldset class=\"object\"><legend>" + key + "</legend>";
         let keyId = utils.getKeyId(key, parentKey);
 
-        html += utils.addHtmlBefore(options, "htmlBeforeObject");
+        html += utils.addHtmlBefore(options, "htmlBeforeObject", key, parentKey);
         html += utils.getHtml(val, options, keyId);
 
         html += "</fieldset>";
 
         return html;
     },
-    addArrayUl: function (key, val, options, parentKey) {
-        let htmlBeforeArray = utils.addHtmlBefore(options, "htmlBeforeArray");
+    addArrayFieldset: function (key, val, options, parentKey) {
+        let htmlBeforeArray = utils.addHtmlBefore(options, "htmlBeforeArray", key, parentKey);
         let html = "<fieldset class=\"array\"><legend>" + key + "</legend>" + htmlBeforeArray + "<ul>";
         let keyId = utils.getKeyId(key, parentKey);
 
@@ -71,9 +88,9 @@ utils = {
             if (utils.isObject(obj[key])) {
                 html += utils.addObjectFieldset(key, obj[key], options, parentKey);
             } else if (utils.isArray(obj[key])) {
-                html += utils.addArrayUl(key, obj[key], options, parentKey);
+                html += utils.addArrayFieldset(key, obj[key], options, parentKey);
             } else {
-                html += utils.addSimpleKeyValue(key, obj[key], parentKey);
+                html += utils.addSimpleKeyValue(key, obj[key], options, parentKey);
             }
         });
 
