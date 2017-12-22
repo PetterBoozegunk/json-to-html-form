@@ -351,15 +351,47 @@ describe("The json-to-html-form module", function () {
                     expect(testP1.length).to.equals(1);
                     expect(testP2.length).to.equals(1);
                 });
-            });
 
-            /*
+                describe("If the htmlBeforeArray option is a function", function () {
+                    it("should get 'key' and 'parentKey' arguments", function () {
+                        let testJson = {
+                            "one": "test",
+                            "two": [{
+                                "three": [{
+                                    "four": [{
+                                        "five": "yay"
+                                    }]
+                                }]
+                            }]
+                        };
+
+                        let options = {
+                            htmlBeforeArray: function (key, parentKey) {
+                                return "<div data-key=\"" + key + "\" data-parentKey=\"" + parentKey + "\">htmlBeforeArray</div>";
+                            }
+                        };
+                        let html = jthf.getForm(testJson, options);
+
+                        document.body.innerHTML = html;
+
+                        let test1 = $("fieldset.array > legend + [data-key='two'][data-parentKey='']");
+                        let test2 = $("fieldset.array > legend + [data-key='three'][data-parentKey='two.0']");
+                        let test3 = $("fieldset.array > legend + [data-key='four'][data-parentKey='two.0.three.0']");
+
+                        expect(test1.length).to.equals(1);
+                        expect(test2.length).to.equals(1);
+                        expect(test3.length).to.equals(1);
+                    });
+                });
+            });
+        });
+
+        /*
                 The 'htmlBefore' options:
                 It should be possible to supply them as a function that is run every 'before' and that function should get a 'parentkey' and 'key' argument
 
                 Add a 'htmlBeforeLabel' option:
                 It should have the same features as the other 'htmlBefore' methods
             */
-        });
     });
 });
