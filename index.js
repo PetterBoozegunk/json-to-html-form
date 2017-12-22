@@ -69,7 +69,7 @@ utils = {
     },
     addArrayFieldset: function (key, val, options, parentKey) {
         let htmlBeforeArray = utils.addHtmlBefore(options, "htmlBeforeArray", key, parentKey);
-        let html = "<fieldset class=\"array\"><legend>" + key + "</legend>" + htmlBeforeArray + "<ul>";
+        let html = "<fieldset class=\"array\"><legend>" + key + "</legend>" + htmlBeforeArray + "<ol>";
         let keyId = utils.getKeyId(key, parentKey);
 
         val.forEach(function (item, index) {
@@ -77,7 +77,7 @@ utils = {
             html += "<li>" + utils.getHtml(item, options, itemKeyId) + "</li>";
         });
 
-        html += "</ul></fieldset>";
+        html += "</ol></fieldset>";
 
         return html;
     },

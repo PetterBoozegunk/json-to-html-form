@@ -162,7 +162,7 @@ describe("The json-to-html-form module", function () {
 
                     document.body.innerHTML = html;
 
-                    let arrObjectTest = $("fieldset.object > fieldset.array > legend + ul > li > label");
+                    let arrObjectTest = $("fieldset.object > fieldset.array > legend + ol > li > label");
 
                     expect(arrObjectTest.length).to.equals(2);
                     expect(arrObjectTest.find("input[type='text'][value='yay']").length).to.equals(1);
@@ -189,8 +189,8 @@ describe("The json-to-html-form module", function () {
                     document.body.innerHTML = html;
 
                     let test1 = $("fieldset.object > label input[value='Marky']");
-                    let test2 = $("fieldset.object > fieldset.array > ul > li > label > input[value='Joey']");
-                    let test3 = $("fieldset.object > fieldset.object > .array > ul > li > label > input[value='deeply nested']");
+                    let test2 = $("fieldset.object > fieldset.array > ol > li > label > input[value='Joey']");
+                    let test3 = $("fieldset.object > fieldset.object > .array > ol > li > label > input[value='deeply nested']");
 
                     expect(test1.length).to.equals(1);
                     expect(test2.length).to.equals(1);
@@ -347,8 +347,8 @@ describe("The json-to-html-form module", function () {
 
                     document.body.innerHTML = html;
 
-                    let testP1 = $("fieldset.object > fieldset.array > legend + .htmlBeforeArray + ul");
-                    let testP2 = $("fieldset.array fieldset.array > legend + .htmlBeforeArray + ul");
+                    let testP1 = $("fieldset.object > fieldset.array > legend + .htmlBeforeArray + ol");
+                    let testP2 = $("fieldset.array fieldset.array > legend + .htmlBeforeArray + ol");
 
                     expect(testP1.length).to.equals(1);
                     expect(testP2.length).to.equals(1);
