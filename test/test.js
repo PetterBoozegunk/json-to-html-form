@@ -40,7 +40,7 @@ describe("The json-to-html-form module", function () {
             it("should contain a <form> contaning and a 'root' fieldset if the (json, object) argument is '{}' (an object)", function () {
                 let html = jthf.getForm({});
 
-                expect(html).to.equals("<form><fieldset class=\"object\"><legend>root</legend></fieldset></form>");
+                expect(html).to.equals("<form><fieldset class=\"object\"><legend id=\"legend-root\">root</legend></fieldset></form>");
             });
 
             describe("Simple key/values", function () {
@@ -318,6 +318,27 @@ describe("The json-to-html-form module", function () {
 
                         expect(textInput.length).to.equals(1);
                     });
+                });
+            });
+
+            describe("legend id attribute", function () {
+                it("should be 'legend-' + the current 'key chain'", function () {
+                    let testJson = {
+                        "level-1": {
+                            "level-2": {
+                                "level-3": "WooooPaaaa"
+                            }
+                        }
+                    };
+                    let html = jthf.getForm(testJson);
+
+                    document.body.innerHTML = html;
+
+                    let legends = $("legend");
+
+                    expect(legends.eq(0).attr("id")).to.equals("legend-root");
+                    expect(legends.eq(1).attr("id")).to.equals("legend-level-1");
+                    expect(legends.eq(2).attr("id")).to.equals("legend-level-1.level-2");
                 });
             });
         });
