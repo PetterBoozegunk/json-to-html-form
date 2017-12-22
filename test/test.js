@@ -514,6 +514,29 @@ describe("The json-to-html-form module", function () {
                     });
                 });
             });
+
+            describe("The 'htmlAfterLegendText' option", function () {
+                it("should be possible to add custom html after the fieldset/legend text", function () {
+                    let testJson = {
+                        "options": "test",
+                        "nestedTest": {
+                            "name": "val"
+                        }
+                    };
+                    let options = {
+                        htmlAfterLegendText: "<span class='htmlAfterLegendText'>htmlAfterLegendText</span>"
+                    };
+                    let html = jthf.getForm(testJson, options);
+
+                    document.body.innerHTML = html;
+
+                    let test1 = $("form > fieldset.object > legend > .htmlAfterLegendText");
+                    let test2 = $("form > fieldset.object > fieldset.object > legend > .htmlAfterLegendText");
+
+                    expect(test1.length).to.equals(1);
+                    expect(test2.text()).to.equals("htmlAfterLegendText");
+                });
+            });
         });
     });
 });

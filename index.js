@@ -44,6 +44,13 @@ utils = {
             "<textarea name=\"" + keyId + "\">" + val + "</textarea>" :
             "<input type=\"text\" value=\"" + val + "\" name=\"" + keyId + "\">";
     },
+    setLegend: function (key, options) {
+        let customHtml = (options && options.htmlAfterLegendText) ?
+            options.htmlAfterLegendText :
+            "";
+
+        return "<legend>" + key + customHtml + "</legend>";
+    },
     addSimpleKeyValue: function (key, val, options, parentKey) {
         let html = "";
         let keyId = utils.getKeyId(key, parentKey);
@@ -57,9 +64,10 @@ utils = {
         return html;
     },
     addObjectFieldset: function (key, val, options, parentKey) {
-        let html = "<fieldset class=\"object\"><legend>" + key + "</legend>";
+        let html = "<fieldset class=\"object\">";
         let keyId = utils.getKeyId(key, parentKey);
 
+        html += utils.setLegend(key, options);
         html += utils.addHtmlBefore(options, "htmlBeforeObject", key, parentKey);
         html += utils.getHtml(val, options, keyId);
 
@@ -101,7 +109,7 @@ utils = {
     },
     addArrayFieldset: function (key, val, options, parentKey) {
         let htmlBeforeArray = utils.addHtmlBefore(options, "htmlBeforeArray", key, parentKey);
-        let html = "<fieldset class=\"array\"><legend>" + key + "</legend>" + htmlBeforeArray + "<ol>";
+        let html = "<fieldset class=\"array\">" + utils.setLegend(key, options) + htmlBeforeArray + "<ol>";
         let keyId = utils.getKeyId(key, parentKey);
 
         val.forEach(function (item, index) {
