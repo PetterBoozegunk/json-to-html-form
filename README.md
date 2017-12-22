@@ -20,27 +20,27 @@ Get a html form from json
 
     <form>
         <fieldset class="object">
-            <legend>Root</legend>
+            <legend id="legend-root">root</legend>
             <label>
                 <span>foo</span>
                 <input type="text" value="bar" name="foo">
             </label>
             <fieldset class="object">
-                <legend>foo1</legend>
+                <legend id="legend-foo1">foo1</legend>
                 <label>
                     <span>foo2</span>
                     <input type="text" value="bar1" name="foo1.foo2">
                 </label>
                 <fieldset class="array">
-                    <legend>array1</legend>
-                    <ul>
+                    <legend id="legend-foo1.array1">array1</legend>
+                    <ol>
                         <li>
                             <label>
                                 <span>arrayItem</span>
                                 <input type="text" value="item" name="foo1.array1.0.arrayItem">
                             </label>
                         </li>
-                    </ul>
+                    </ol>
                 </fieldset>
             </fieldset>
         </fieldset>
