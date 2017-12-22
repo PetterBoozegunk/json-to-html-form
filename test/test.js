@@ -167,6 +167,78 @@ describe("The json-to-html-form module", function () {
                     expect(arrObjectTest.length).to.equals(2);
                     expect(arrObjectTest.find("input[type='text'][value='yay']").length).to.equals(1);
                 });
+
+                describe("When the values in an array is NOT an object", function () {
+                    describe("But a(n) ...", function () {
+                        describe("... string", function () {
+                            it("should be represented by a input[type='text']/textarea", function () {
+                                let testJson = {
+                                    "array1": ["Ramones", "Rocket from the tombs feat. The Dead Boys"]
+                                };
+                                let html = jthf.getForm(testJson);
+
+                                document.body.innerHTML = html;
+
+                                let stringLi = $("fieldset.array > ol > li > input[type='text']");
+                                let stringTxtarea = $("fieldset.array > ol > li > textarea");
+
+                                expect(stringLi.val()).to.equals("Ramones");
+                                expect(stringTxtarea.val()).to.equals("Rocket from the tombs feat. The Dead Boys");
+                            });
+                        });
+
+                        describe("... array", function () {
+                            it("should be represented by an array fieldset", function () {
+                                let testJson = {
+                                    "array1": [["nested", "array"]]
+                                };
+                                let html = jthf.getForm(testJson);
+
+                                document.body.innerHTML = html;
+
+                                let arrayFieldset = $("fieldset.array > ol > li > fieldset.array");
+                                let legend = arrayFieldset.find("> legend");
+                                let nestedArrayLis = arrayFieldset.find("> ol > li > input[type='text']");
+
+                                expect(legend.text()).to.equals("array1.0");
+
+                                expect(nestedArrayLis.get(0).value).to.equals("nested");
+                                expect(nestedArrayLis.get(1).value).to.equals("array");
+
+                                expect(nestedArrayLis.get(1).name).to.equals("array1.0.1");
+                            });
+
+                            it("should be able to handle deepley nested arrays (part 1)", function () {
+                                let testJson = {
+                                    "array1": [["nested", ["array"]]]
+                                };
+                                let html = jthf.getForm(testJson);
+
+                                document.body.innerHTML = html;
+
+                                let arrayFieldset = $("fieldset.array > ol > li > fieldset.array");
+                                let nestedArrayLis = arrayFieldset.find("input[type='text']");
+
+                                expect(nestedArrayLis.get(1).name).to.equals("array1.0.1.0");
+                            });
+
+                            it("should be able to handle deepley nested arrays (part 2)", function () {
+                                let testJson = {
+                                    "array1": [["nested", ["array", {
+                                        guitar: "Doyle"
+                                    }]]]
+                                };
+                                let html = jthf.getForm(testJson);
+
+                                document.body.innerHTML = html;
+
+                                let inputTxt = $("fieldset.array input[type='text'][name='array1.0.1.1.guitar']");
+
+                                expect(inputTxt.get(0).value).to.equals("Doyle");
+                            });
+                        });
+                    });
+                });
             });
 
             describe("When the json object is nested", function () {
