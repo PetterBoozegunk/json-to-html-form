@@ -286,11 +286,45 @@ describe("The json-to-html-form module", function () {
 
                     document.body.innerHTML = html;
 
-                    let testP1 = $("form > fieldset.object > legend + .htmlBeforeObject");
-                    let testP2 = $("form > fieldset.object > fieldset.object > legend + .htmlBeforeObject");
+                    let test1 = $("form > fieldset.object > legend + .htmlBeforeObject");
+                    let test2 = $("form > fieldset.object > fieldset.object > legend + .htmlBeforeObject");
 
-                    expect(testP1.length).to.equals(1);
-                    expect(testP2.length).to.equals(1);
+                    expect(test1.length).to.equals(1);
+                    expect(test2.length).to.equals(1);
+                });
+
+                describe("If the htmlBeforeObject option is a function", function () {
+                    it("should get 'key' and 'parentKey' arguments", function () {
+                        let testJson = {
+                            "one": "test",
+                            "two": {
+                                "three": {
+                                    "four": {
+                                        "five": "yay"
+                                    }
+                                }
+                            }
+                        };
+                        let options = {
+                            htmlBeforeObject: function (key, parentKey) {
+                                return "<div data-key=\"" + key + "\" data-parentKey=\"" + parentKey + "\">htmlBeforeObject</div>";
+                            }
+                        };
+                        let html = jthf.getForm(testJson, options);
+
+                        document.body.innerHTML = html;
+
+
+                        let test1 = $("fieldset.object > legend + [data-key=''][data-parentKey='']");
+                        let test2 = $("fieldset.object > legend + [data-key='two'][data-parentKey='']");
+                        let test3 = $("fieldset.object > legend + [data-key='three'][data-parentKey='two']");
+                        let test4 = $("fieldset.object > legend + [data-key='four'][data-parentKey='two.three']");
+
+                        expect(test1.length).to.equals(1);
+                        expect(test2.length).to.equals(1);
+                        expect(test3.length).to.equals(1);
+                        expect(test4.length).to.equals(1);
+                    });
                 });
             });
 
