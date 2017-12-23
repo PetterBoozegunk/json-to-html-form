@@ -8,12 +8,12 @@
 
 const chai = require("chai");
 const expect = chai.expect;
-const jsdom = require("mocha-jsdom");
+
+const cheerio = require("cheerio");
 
 const jthf = require("../index");
 
 let $;
-jsdom();
 
 describe("The json-to-html-form module", function () {
 
@@ -26,9 +26,6 @@ describe("The json-to-html-form module", function () {
     });
 
     describe("The 'getForm' method", function () {
-        before(function () {
-            $ = require('jquery');
-        });
 
         describe("The HTML (return value)", function () {
             it("should contain an empty form (html string) if no argument(s) were supplied", function () {
@@ -52,7 +49,7 @@ describe("The json-to-html-form module", function () {
                         };
                         let html = jthf.getForm(testJson);
 
-                        document.body.innerHTML = html;
+                        $ = cheerio.load(html);
 
                         let labels = $("fieldset label");
 
@@ -78,7 +75,7 @@ describe("The json-to-html-form module", function () {
                         };
                         let html = jthf.getForm(testJson);
 
-                        document.body.innerHTML = html;
+                        $ = cheerio.load(html);
 
                         let numberValInput = $("fieldset label input[type='text'][value='1']");
 
@@ -92,7 +89,7 @@ describe("The json-to-html-form module", function () {
                         };
                         let html = jthf.getForm(testJson);
 
-                        document.body.innerHTML = html;
+                        $ = cheerio.load(html);
 
                         let nullValInput = $("fieldset label input[type='text'][value='null']");
 
@@ -106,7 +103,7 @@ describe("The json-to-html-form module", function () {
                         };
                         let html = jthf.getForm(testJson);
 
-                        document.body.innerHTML = html;
+                        $ = cheerio.load(html);
 
                         let boolValInput = $("fieldset label input[type='text'][value='true']");
 
@@ -120,7 +117,7 @@ describe("The json-to-html-form module", function () {
                     };
                     let html = jthf.getForm(testJson);
 
-                    document.body.innerHTML = html;
+                    $ = cheerio.load(html);
 
                     let txtarea = $("fieldset textarea[name='longString']");
 
@@ -138,7 +135,7 @@ describe("The json-to-html-form module", function () {
                     };
                     let html = jthf.getForm(testJson);
 
-                    document.body.innerHTML = html;
+                    $ = cheerio.load(html);
 
                     let fsObjectTest = $("fieldset.object > fieldset.object > label");
 
@@ -160,7 +157,7 @@ describe("The json-to-html-form module", function () {
                     };
                     let html = jthf.getForm(testJson);
 
-                    document.body.innerHTML = html;
+                    $ = cheerio.load(html);
 
                     let arrObjectTest = $("fieldset.object > fieldset.array > legend + ol > li > label");
 
@@ -177,13 +174,13 @@ describe("The json-to-html-form module", function () {
                                 };
                                 let html = jthf.getForm(testJson);
 
-                                document.body.innerHTML = html;
+                                $ = cheerio.load(html);
 
                                 let stringLi = $("fieldset.array > ol > li > input[type='text']");
                                 let stringTxtarea = $("fieldset.array > ol > li > textarea");
 
-                                expect(stringLi.val()).to.equals("Ramones");
-                                expect(stringTxtarea.val()).to.equals("Rocket from the tombs feat. The Dead Boys");
+                                expect(stringLi[0].attribs.value).to.equals("Ramones");
+                                expect(stringTxtarea[0].children[0].data).to.equals("Rocket from the tombs feat. The Dead Boys");
                             });
                         });
 
@@ -194,7 +191,7 @@ describe("The json-to-html-form module", function () {
                                 };
                                 let html = jthf.getForm(testJson);
 
-                                document.body.innerHTML = html;
+                                $ = cheerio.load(html);
 
                                 let arrayFieldset = $("fieldset.array > ol > li > fieldset.array");
                                 let legend = arrayFieldset.find("> legend");
@@ -202,10 +199,10 @@ describe("The json-to-html-form module", function () {
 
                                 expect(legend.text()).to.equals("array1.0");
 
-                                expect(nestedArrayLis.get(0).value).to.equals("nested");
-                                expect(nestedArrayLis.get(1).value).to.equals("array");
+                                expect(nestedArrayLis[0].attribs.value).to.equals("nested");
+                                expect(nestedArrayLis[1].attribs.value).to.equals("array");
 
-                                expect(nestedArrayLis.get(1).name).to.equals("array1.0.1");
+                                expect(nestedArrayLis[1].attribs.name).to.equals("array1.0.1");
                             });
 
                             it("should be able to handle deepley nested arrays (part 1)", function () {
@@ -214,12 +211,12 @@ describe("The json-to-html-form module", function () {
                                 };
                                 let html = jthf.getForm(testJson);
 
-                                document.body.innerHTML = html;
+                                $ = cheerio.load(html);
 
                                 let arrayFieldset = $("fieldset.array > ol > li > fieldset.array");
                                 let nestedArrayLis = arrayFieldset.find("input[type='text']");
 
-                                expect(nestedArrayLis.get(1).name).to.equals("array1.0.1.0");
+                                expect(nestedArrayLis[1].attribs.name).to.equals("array1.0.1.0");
                             });
 
                             it("should be able to handle deepley nested arrays (part 2)", function () {
@@ -230,11 +227,11 @@ describe("The json-to-html-form module", function () {
                                 };
                                 let html = jthf.getForm(testJson);
 
-                                document.body.innerHTML = html;
+                                $ = cheerio.load(html);
 
                                 let inputTxt = $("fieldset.array input[type='text'][name='array1.0.1.1.guitar']");
 
-                                expect(inputTxt.get(0).value).to.equals("Doyle");
+                                expect(inputTxt[0].attribs.value).to.equals("Doyle");
                             });
                         });
                     });
@@ -258,7 +255,7 @@ describe("The json-to-html-form module", function () {
                     };
                     let html = jthf.getForm(testJson);
 
-                    document.body.innerHTML = html;
+                    $ = cheerio.load(html);
 
                     let test1 = $("fieldset.object > label input[value='Marky']");
                     let test2 = $("fieldset.object > fieldset.array > ol > li > label > input[value='Joey']");
@@ -278,7 +275,7 @@ describe("The json-to-html-form module", function () {
                         };
                         let html = jthf.getForm(testJson);
 
-                        document.body.innerHTML = html;
+                        $ = cheerio.load(html);
 
                         let textInput = $("form > fieldset > label > input[type='text'][value='one'][name='level-1']");
 
@@ -294,7 +291,7 @@ describe("The json-to-html-form module", function () {
                         };
                         let html = jthf.getForm(testJson);
 
-                        document.body.innerHTML = html;
+                        $ = cheerio.load(html);
 
                         let textInput = $("input[type='text'][value='yay'][name='level-1.level-2']");
 
@@ -312,7 +309,7 @@ describe("The json-to-html-form module", function () {
                         };
                         let html = jthf.getForm(testJson);
 
-                        document.body.innerHTML = html;
+                        $ = cheerio.load(html);
 
                         let textInput = $("input[type='text'][value='Glenn Danzig'][name='level-1.level-2-array.0.name']");
 
@@ -332,7 +329,7 @@ describe("The json-to-html-form module", function () {
                     };
                     let html = jthf.getForm(testJson);
 
-                    document.body.innerHTML = html;
+                    $ = cheerio.load(html);
 
                     let legends = $("legend");
 
@@ -354,7 +351,7 @@ describe("The json-to-html-form module", function () {
                     };
                     let html = jthf.getForm(testJson, options);
 
-                    document.body.innerHTML = html;
+                    $ = cheerio.load(html);
 
                     let form = $("form");
                     let fieldset = $("fieldset");
@@ -377,7 +374,7 @@ describe("The json-to-html-form module", function () {
                     };
                     let html = jthf.getForm(testJson, options);
 
-                    document.body.innerHTML = html;
+                    $ = cheerio.load(html);
 
                     let test1 = $("form > fieldset.object > legend + .htmlBeforeObject");
                     let test2 = $("form > fieldset.object > fieldset.object > legend + .htmlBeforeObject");
@@ -406,7 +403,7 @@ describe("The json-to-html-form module", function () {
                             };
                             let html = jthf.getForm(testJson, options);
 
-                            document.body.innerHTML = html;
+                            $ = cheerio.load(html);
 
 
                             let test1 = $("fieldset.object > legend + [data-key=''][data-parentKey='']");
@@ -438,7 +435,7 @@ describe("The json-to-html-form module", function () {
                     };
                     let html = jthf.getForm(testJson, options);
 
-                    document.body.innerHTML = html;
+                    $ = cheerio.load(html);
 
                     let testP1 = $("fieldset.object > fieldset.array > legend + .htmlBeforeArray + ol");
                     let testP2 = $("fieldset.array fieldset.array > legend + .htmlBeforeArray + ol");
@@ -468,7 +465,7 @@ describe("The json-to-html-form module", function () {
                             };
                             let html = jthf.getForm(testJson, options);
 
-                            document.body.innerHTML = html;
+                            $ = cheerio.load(html);
 
                             let test1 = $("fieldset.array > legend + [data-key='two'][data-parentKey='']");
                             let test2 = $("fieldset.array > legend + [data-key='three'][data-parentKey='two.0']");
@@ -495,7 +492,7 @@ describe("The json-to-html-form module", function () {
                     };
                     let html = jthf.getForm(testJson, options);
 
-                    document.body.innerHTML = html;
+                    $ = cheerio.load(html);
 
                     let test1 = $("form > fieldset.object > legend + label .htmlBeforeLabel:first-child + span");
                     let test2 = $("form > fieldset.object > fieldset.object > legend + label > .htmlBeforeLabel");
@@ -524,7 +521,7 @@ describe("The json-to-html-form module", function () {
                             };
                             let html = jthf.getForm(testJson, options);
 
-                            document.body.innerHTML = html;
+                            $ = cheerio.load(html);
 
                             let test1 = $("span[data-key='one'][data-parentKey='']");
                             let test2 = $("span[data-key='five'][data-parentKey='two.three.four']");
@@ -549,7 +546,7 @@ describe("The json-to-html-form module", function () {
                     };
                     let html = jthf.getForm(testJson, options);
 
-                    document.body.innerHTML = html;
+                    $ = cheerio.load(html);
 
                     let test1 = $("form > fieldset.object > legend > .htmlAfterLegendText");
                     let test2 = $("form > fieldset.object > fieldset.object > legend > .htmlAfterLegendText");
