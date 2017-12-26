@@ -559,7 +559,7 @@ describe("The json-to-html-form module", function () {
             });
 
             describe("The 'htmlBeforeArrayItem' option", function () {
-                it("should be possible to add custom html before an array item", function () {
+                it("should be possible to add custom html before an array item (part 1)", function () {
                     let testJson = {
                         "array": [{
                             item0: "Yo!"
@@ -577,6 +577,58 @@ describe("The json-to-html-form module", function () {
                     let test1 = $("fieldset.array > ol > li > .htmlBeforeArrayItem");
 
                     expect(test1.length).to.equals(2);
+                });
+
+                it("should be possible to add custom html before an array item (part 2)", function () {
+                    let testJson = {
+                        "array": ["Heavy", "Und", "Metal"]
+                    };
+                    let options = {
+                        htmlBeforeArrayItem: "<span class='htmlBeforeArrayItem'>htmlBeforeArrayItem</span>"
+                    };
+                    let html = jthf.getForm(testJson, options);
+
+                    $ = cheerio.load(html);
+
+                    let test1 = $("fieldset.array > ol > li > .htmlBeforeArrayItem + input[name='array.2'][value='Metal']");
+
+                    expect(test1.length).to.equals(1);
+                });
+
+                it("should be possible to add custom html before an array item (part 3)", function () {
+                    let testJson = {
+                        "array": ["Country", "And", ["Western"]]
+                    };
+                    let options = {
+                        htmlBeforeArrayItem: "<span class='htmlBeforeArrayItem'>htmlBeforeArrayItem</span>"
+                    };
+                    let html = jthf.getForm(testJson, options);
+
+                    $ = cheerio.load(html);
+
+                    let test1 = $("fieldset.array > ol > li > .htmlBeforeArrayItem + fieldset.array");
+                    let test2 = $("legend[id='legend-array.2'] + ol > li > .htmlBeforeArrayItem + input[name='array.2.0'][value='Western']");
+
+                    expect(test1.length).to.equals(1);
+                    expect(test2.length).to.equals(1);
+                });
+                it("should be possible to add custom html before an array item (part 3)", function () {
+                    let testJson = {
+                        "array": [{
+                            "Grunge": "Seattle"
+                        }],
+                        "Not Array": "Nope"
+                    };
+                    let options = {
+                        htmlBeforeArrayItem: "<span class='htmlBeforeArrayItem'>htmlBeforeArrayItem</span>"
+                    };
+                    let html = jthf.getForm(testJson, options);
+
+                    $ = cheerio.load(html);
+
+                    let test1 = $("fieldset.array > ol > li > .htmlBeforeArrayItem + label > span");
+
+                    expect(test1.text()).to.equals("Grunge");
                 });
             });
         });
