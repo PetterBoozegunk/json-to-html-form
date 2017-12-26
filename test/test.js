@@ -557,6 +557,28 @@ describe("The json-to-html-form module", function () {
                     expect(test2.text()).to.equals("htmlAfterLegendText");
                 });
             });
+
+            describe("The 'htmlBeforeArrayItem' option", function () {
+                it("should be possible to add custom html before an array item", function () {
+                    let testJson = {
+                        "array": [{
+                            item0: "Yo!"
+                        }, {
+                            item1: "MTV Raps"
+                        }]
+                    };
+                    let options = {
+                        htmlBeforeArrayItem: "<span class='htmlBeforeArrayItem'>htmlBeforeArrayItem</span>"
+                    };
+                    let html = jthf.getForm(testJson, options);
+
+                    $ = cheerio.load(html);
+
+                    let test1 = $("fieldset.array > ol > li > .htmlBeforeArrayItem");
+
+                    expect(test1.length).to.equals(2);
+                });
+            });
         });
     });
 });

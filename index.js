@@ -25,7 +25,7 @@ utils = {
         let keyId = utils.removeRootFromKey(parentKey);
         let noRootKey = utils.removeRootFromKey(key);
 
-        return options[name](noRootKey, keyId);
+        return options[name](noRootKey, keyId) || "";
     },
     getHtmlBefore: function (options, name, key, parentKey) {
         return (typeof options[name] === "function") ?
@@ -107,8 +107,10 @@ utils = {
     addItemToArrayLi: function (item, key, itemKeyId, options) {
         let itemType = utils.getItemType(item);
         let addItemMethod = utils.arrayLiItemMethods[itemType] || utils.arrayLiItemMethods.defaultMethod;
+        let htmlBeforeArrayItem = utils.addHtmlBefore(options, "htmlBeforeArrayItem", key, itemKeyId);
+        let html = htmlBeforeArrayItem + addItemMethod(item, key, itemKeyId, options);
 
-        return addItemMethod(item, key, itemKeyId, options);
+        return html;
     },
     addArrayFieldset: function (key, val, options, parentKey) {
         let htmlBeforeArray = utils.addHtmlBefore(options, "htmlBeforeArray", key, parentKey);
