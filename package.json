@@ -1,6 +1,6 @@
 {
   "name": "json-to-html-form",
-  "version": "1.6.71",
+  "version": "1.7.0",
   "description": "Get a html form from json",
   "engines": {
     "node": ">=8.1.2"
