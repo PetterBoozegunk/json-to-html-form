@@ -612,7 +612,8 @@ describe("The json-to-html-form module", function () {
                     expect(test1.length).to.equals(1);
                     expect(test2.length).to.equals(1);
                 });
-                it("should be possible to add custom html before an array item (part 3)", function () {
+
+                it("should be possible to add custom html before an array item (part 4)", function () {
                     let testJson = {
                         "array": [{
                             "Grunge": "Seattle"
