@@ -1,6 +1,6 @@
 # json-to-html-form
 ![Travis build](https://travis-ci.org/PetterBoozegunk/json-to-html-form.svg?branch=master)
-![Mocha tests](/tests-badge.svg)
+![Mocha tests](https://raw.githubusercontent.com/PetterBoozegunk/json-to-html-form/master/tests-badge.svg?sanitize=true)
 
 Get a html form from json
 
