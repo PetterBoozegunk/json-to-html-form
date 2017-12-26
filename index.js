@@ -25,7 +25,7 @@ utils = {
         let keyId = utils.removeRootFromKey(parentKey);
         let noRootKey = utils.removeRootFromKey(key);
 
-        return options[name](noRootKey, keyId) || "";
+        return options[name](noRootKey, keyId);
     },
     getHtmlBefore: function (options, name, key, parentKey) {
         return (typeof options[name] === "function") ?
