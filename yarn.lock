@@ -608,6 +608,10 @@ domutils@^1.5.1:
     dom-serializer "0"
     domelementtype "1"
 
+dot@^1.0.3:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/dot/-/dot-1.1.2.tgz#c7377019fc4e550798928b2b9afeb66abfa1f2f9"
+
 duplexer2@0.0.2:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/duplexer2/-/duplexer2-0.0.2.tgz#c614dcf67e2fb14995a91711e5a617e8a60a31db"
@@ -2371,6 +2375,12 @@ mkdirp@0.5.1, mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.0:
   dependencies:
     minimist "0.0.8"
 
+mocha-reporter-badge@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/mocha-reporter-badge/-/mocha-reporter-badge-0.1.0.tgz#ccc0303e69eb9d6781daabf969ef79676a5d46cf"
+  dependencies:
+    shields-lightweight "^0.1.0"
+
 mocha@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/mocha/-/mocha-4.0.1.tgz#0aee5a95cf69a4618820f5e51fa31717117daf1b"
@@ -2985,6 +2995,12 @@ shelljs@^0.7.5:
     glob "^7.0.0"
     interpret "^1.0.0"
     rechoir "^0.6.2"
+
+shields-lightweight@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/shields-lightweight/-/shields-lightweight-0.1.0.tgz#a998fc983b429615e23d4a8184925424817957aa"
+  dependencies:
+    dot "^1.0.3"
 
 sigmund@^1.0.1, sigmund@~1.0.0:
   version "1.0.1"

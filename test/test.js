@@ -2,9 +2,11 @@
     es6: true, node: true
 */
 /*global
-    describe, it, before, document
+    describe, it, before, document, process
 */
 "use strict";
+
+process.env.MOCHA_BADGE_STYLE = "flat";
 
 const chai = require("chai");
 const expect = chai.expect;

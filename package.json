@@ -11,7 +11,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "test": "gulp complexity && mocha",
+    "test": "gulp complexity && mocha && mocha --reporter mocha-reporter-badge > tests-badge.svg",
     "prepush": "yarn test"
   },
   "devDependencies": {
@@ -20,6 +20,7 @@
     "gulp-cccp": "^0.3.1",
     "husky": "^0.14.3",
     "jquery": "^3.2.1",
-    "mocha": "^4.0.1"
+    "mocha": "^4.0.1",
+    "mocha-reporter-badge": "^0.1.0"
   }
 }
