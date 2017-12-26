@@ -1,4 +1,6 @@
 # json-to-html-form
+![Mocha tests](/tests-badge.svg)
+
 Get a html form from json
 
 ## usage
